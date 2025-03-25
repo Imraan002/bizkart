@@ -8,11 +8,12 @@ export default function CartScreen() {
   const { cartItems } = useLocalSearchParams();
   const [cart, setCart] = useState(cartItems ? JSON.parse(cartItems as string) : []);
 
-  // ✅ Remove Item from Cart
-  const removeItem = (id: string) => {
-    const updatedCart = cart.filter((item: { id: string }) => item.id !== id);
+  // ✅ Remove Item from Cart by index
+  const removeItem = (index: number) => {
+    const updatedCart = cart.filter((item: any, i: number) => i !== index); // Explicitly type 'item' and 'i'
     setCart(updatedCart);
   };
+  
 
   // ✅ Calculate Total Price
   const totalPrice = cart.reduce((total: number, item: { price: number }) => total + Number(item.price), 0);
@@ -27,15 +28,15 @@ export default function CartScreen() {
         <>
           <FlatList
             data={cart}
-            keyExtractor={(item) => item.id}
-            renderItem={({ item }) => (
+            keyExtractor={(item, index) => index.toString()} // Use index as the unique key
+            renderItem={({ item, index }) => (
               <View style={styles.cartItem}>
                 <Image source={{ uri: item.image }} style={styles.image} />
                 <View style={styles.productInfo}>
                   <Text style={styles.productName}>{item.name}</Text>
                   <Text style={styles.productPrice}>₹{item.price}</Text>
                 </View>
-                <TouchableOpacity onPress={() => removeItem(item.id)}>
+                <TouchableOpacity onPress={() => removeItem(index)}>
                   <Ionicons name="trash" size={24} color="red" />
                 </TouchableOpacity>
               </View>

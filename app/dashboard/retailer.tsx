@@ -4,6 +4,7 @@ import { useRouter } from "expo-router";
 import { collection, getDocs } from "firebase/firestore";
 import { db } from "../../firebaseConfig";
 import { Ionicons } from "@expo/vector-icons";
+import { LinearGradient } from "expo-linear-gradient";
 
 // ✅ Define Product Type
 type Product = {
@@ -46,18 +47,21 @@ export default function RetailerDashboard() {
   const goToCart = () => {
     router.push({
       pathname: "./cart",
-      params: { cartItems: JSON.stringify(cart) }, // ✅ Pass cart data as a JSON string
+      params: { cartItems: JSON.stringify(cart) },
     });
   };
 
   return (
     <View style={styles.container}>
-      <Text style={styles.title}>Retailer Dashboard</Text>
+      {/* 🎨 Gradient Header */}
+      <LinearGradient colors={["#007BFF", "#0056b3"]} style={styles.header}>
+        <Text style={styles.title}>Retailer Dashboard</Text>
+      </LinearGradient>
 
-      {/* 🛒 Cart Button */}
+      {/* 🛒 Floating Cart Button */}
       <TouchableOpacity style={styles.cartButton} onPress={goToCart}>
-        <Ionicons name="cart" size={28} color="#fff" />
-        {cart.length > 0 && <Text style={styles.cartText}>{cart.length}</Text>}
+        <Ionicons name="cart" size={30} color="#fff" />
+        {cart.length > 0 && <View style={styles.cartBadge}><Text style={styles.cartBadgeText}>{cart.length}</Text></View>}
       </TouchableOpacity>
 
       {/* 📌 Product List */}
@@ -84,16 +88,20 @@ export default function RetailerDashboard() {
 
 // ✅ Styles
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20, backgroundColor: "#f5f5f5" },
-  title: { fontSize: 28, fontWeight: "bold", textAlign: "center", marginBottom: 20, color: "#333" },
+  container: { flex: 1, backgroundColor: "#f8f9fa" },
 
-  // 🛒 Cart Button
-  cartButton: { position: "absolute", top: 15, right: 20, backgroundColor: "#007BFF", padding: 12, borderRadius: 50, flexDirection: "row", alignItems: "center" },
-  cartText: { color: "#fff", fontSize: 16, fontWeight: "bold", marginLeft: 5 },
+  // 🎨 Gradient Header
+  header: { paddingVertical: 20, paddingHorizontal: 15, alignItems: "center", borderBottomLeftRadius: 20, borderBottomRightRadius: 20, elevation: 5 },
+  title: { fontSize: 26, fontWeight: "bold", color: "#fff" },
+
+  // 🛒 Floating Cart Button
+  cartButton: { position: "absolute", top: 15, right: 20, backgroundColor: "#ff6600", padding: 12, borderRadius: 50, elevation: 5 },
+  cartBadge: { position: "absolute", top: -5, right: -5, backgroundColor: "#ff0000", borderRadius: 10, paddingHorizontal: 6, paddingVertical: 2 },
+  cartBadgeText: { color: "#fff", fontSize: 12, fontWeight: "bold" },
 
   // 📌 Product Card
-  productCard: { flexDirection: "row", backgroundColor: "#fff", padding: 15, borderRadius: 10, marginBottom: 10, alignItems: "center", shadowColor: "#000", shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.1, shadowRadius: 5, elevation: 3 },
-  productImage: { width: 80, height: 80, borderRadius: 10, marginRight: 10 },
+  productCard: { flexDirection: "row", backgroundColor: "#fff", padding: 15, borderRadius: 10, marginVertical: 8, marginHorizontal: 10, alignItems: "center", shadowColor: "#000", shadowOffset: { width: 0, height: 3 }, shadowOpacity: 0.2, shadowRadius: 5, elevation: 4 },
+  productImage: { width: 90, height: 90, borderRadius: 10, marginRight: 12 },
   productInfo: { flex: 1 },
   productName: { fontSize: 18, fontWeight: "bold", color: "#333" },
   productPrice: { fontSize: 16, color: "#28a745", marginBottom: 5 },
@@ -102,3 +110,4 @@ const styles = StyleSheet.create({
   addToCartButton: { backgroundColor: "#FF6600", padding: 10, borderRadius: 10, flexDirection: "row", alignItems: "center", justifyContent: "center", width: "100%" },
   addToCartText: { color: "#fff", fontSize: 16, fontWeight: "bold", marginLeft: 5 },
 });
+
